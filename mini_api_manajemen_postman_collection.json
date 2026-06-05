@@ -1,0 +1,349 @@
+{
+  "info": {
+    "name": "Mini API Manajemen",
+    "description": "API collection for Mini API Manajemen project.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "New User", "type": "text" },
+                { "key": "email", "value": "user@example.com", "type": "text" },
+                { "key": "password", "value": "password", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "email", "value": "admin@example.com", "type": "text" },
+                { "key": "password", "value": "password", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.success && jsonData.data.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": ["{{base_url}}"],
+              "path": ["logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/projects", "host": ["{{base_url}}"], "path": ["projects"] }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "New Project", "type": "text" },
+                { "key": "description", "value": "Project description", "type": "text" },
+                { "key": "status", "value": "planning", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/projects", "host": ["{{base_url}}"], "path": ["projects"] }
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "name", "value": "Updated Project Name", "type": "text" },
+                { "key": "status", "value": "ongoing", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/projects/1", "host": ["{{base_url}}"], "path": ["projects", "1"] }
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/projects/1", "host": ["{{base_url}}"], "path": ["projects", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/tasks", "host": ["{{base_url}}"], "path": ["tasks"] }
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "project_id", "value": "1", "type": "text" },
+                { "key": "user_id", "value": "3", "type": "text" },
+                { "key": "title", "value": "Complete initial setup", "type": "text" },
+                { "key": "status", "value": "todo", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/tasks", "host": ["{{base_url}}"], "path": ["tasks"] }
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "title", "value": "Updated title", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/tasks/1", "host": ["{{base_url}}"], "path": ["tasks", "1"] }
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "status", "value": "done", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/tasks/1/status", "host": ["{{base_url}}"], "path": ["tasks", "1", "status"] }
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/tasks/1", "host": ["{{base_url}}"], "path": ["tasks", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Servers",
+      "item": [
+        {
+          "name": "Get All Servers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/servers", "host": ["{{base_url}}"], "path": ["servers"] }
+          }
+        },
+        {
+          "name": "Get Server By ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/servers/1", "host": ["{{base_url}}"], "path": ["servers", "1"] }
+          }
+        },
+        {
+          "name": "Create Server",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "New Server", "type": "text" },
+                { "key": "ip_address", "value": "127.0.0.1", "type": "text" },
+                { "key": "os", "value": "Ubuntu", "type": "text" },
+                { "key": "is_active", "value": "1", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/servers", "host": ["{{base_url}}"], "path": ["servers"] }
+          }
+        },
+        {
+          "name": "Update Server",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "is_active", "value": "0", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/servers/1", "host": ["{{base_url}}"], "path": ["servers", "1"] }
+          }
+        },
+        {
+          "name": "Delete Server",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/servers/1", "host": ["{{base_url}}"], "path": ["servers", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Deployments",
+      "item": [
+        {
+          "name": "Get All Deployments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/deployments", "host": ["{{base_url}}"], "path": ["deployments"] }
+          }
+        },
+        {
+          "name": "Get Deployment By ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/deployments/1", "host": ["{{base_url}}"], "path": ["deployments", "1"] }
+          }
+        },
+        {
+          "name": "Create Deployment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "project_id", "value": "1", "type": "text" },
+                { "key": "server_id", "value": "1", "type": "text" },
+                { "key": "deploy_date", "value": "2026-05-19 12:00:00", "type": "text" },
+                { "key": "status", "value": "pending", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/deployments", "host": ["{{base_url}}"], "path": ["deployments"] }
+          }
+        },
+        {
+          "name": "Update Deployment",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "status", "value": "success", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/deployments/1", "host": ["{{base_url}}"], "path": ["deployments", "1"] }
+          }
+        },
+        {
+          "name": "Delete Deployment",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/deployments/1", "host": ["{{base_url}}"], "path": ["deployments", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
